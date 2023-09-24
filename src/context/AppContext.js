@@ -7,7 +7,8 @@ export default function AppContext({ children }) {
   const [isLoading, setIsLoading] = useState(false);
   const [page, setPage] = useState("");
   const [totalPages, setTotalPages] = useState(null);
-
+  const [filteredPosts, setFilteredPosts] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
   async function fetchBlogApi(page = 1) {
     setIsLoading(true);
 
@@ -16,12 +17,16 @@ export default function AppContext({ children }) {
       const result = await response.json();
       setPosts(result.posts);
       setPage(result.page);
+      setPosts(result.posts);
+setFilteredPosts(result.posts);
       setTotalPages(result.totalPages);
+      setFilteredPosts(result.posts);
       console.log(result);
     } catch (err) {
       console.log(`Error Occur in fetch API ${err}`);
       setPosts([]);
       setPage("");
+      setFilteredPosts([]);
     }
 
     setIsLoading(false);
@@ -31,6 +36,7 @@ export default function AppContext({ children }) {
     setPage(page);
     fetchBlogApi(page);
   }
+ 
 
   const value = {
     posts,
@@ -43,6 +49,8 @@ export default function AppContext({ children }) {
     setTotalPages,
     fetchBlogApi,
     handlePageChange,
+    filteredPosts, setFilteredPosts,
+    searchQuery, setSearchQuery
   };
   return (
     <ContextProvider.Provider value={value}>
